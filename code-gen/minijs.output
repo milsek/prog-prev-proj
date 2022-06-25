@@ -1,3 +1,9 @@
+Terminals unused in grammar
+
+    _QMARK
+    _COLON
+
+
 Grammar
 
     0 $accept: program $end
@@ -96,120 +102,122 @@ Terminals, with rules where they appear
     _FUNCDEC (259) 5 9
     _ARROW (260) 7
     _COMMA (261) 16 43
-    _IF (262) 49
-    _ELSE (263) 46
-    _RETURN (264) 51
-    _ID <s> (265) 5 7 9 17 22 30 34 39
-    _NUMBER <s> (266) 37
-    _LPAREN (267) 5 9 12 14 36 39 49
-    _RPAREN (268) 5 9 12 14 36 39 49
-    _LBRACKET (269) 19 29
-    _RBRACKET (270) 19 29
-    _ASSIGN (271) 7 9 30
-    _SEMICOLON (272) 22 30 51
-    _AROP <i> (273) 32
-    _RELOP <i> (274) 50
-    ONLY_IF (275)
+    _QMARK (262)
+    _COLON (263)
+    _IF (264) 49
+    _ELSE (265) 46
+    _RETURN (266) 51
+    _ID <s> (267) 5 7 9 17 22 30 34 39
+    _NUMBER <s> (268) 37
+    _LPAREN (269) 5 9 12 14 36 39 49
+    _RPAREN (270) 5 9 12 14 36 39 49
+    _LBRACKET (271) 19 29
+    _RBRACKET (272) 19 29
+    _ASSIGN (273) 7 9 30
+    _SEMICOLON (274) 22 30 51
+    _AROP <i> (275) 32
+    _RELOP <i> (276) 50
+    ONLY_IF (277)
 
 
 Nonterminals, with rules where they appear
 
-    $accept (21)
+    $accept (23)
         on left: 0
-    program (22)
+    program (24)
         on left: 1
         on right: 0
-    function_list (23)
+    function_list (25)
         on left: 2 3
         on right: 1 3
-    function (24)
+    function (26)
         on left: 5 7 9
         on right: 2 3
-    $@1 (25)
+    $@1 (27)
         on left: 4
         on right: 5
-    $@2 (26)
+    $@2 (28)
         on left: 6
         on right: 7
-    $@3 (27)
+    $@3 (29)
         on left: 8
         on right: 9
-    parameters (28)
+    parameters (30)
         on left: 10 11
         on right: 5 9
-    arrow_parameters (29)
+    arrow_parameters (31)
         on left: 12 13 14
         on right: 7
-    parameter_list (30)
+    parameter_list (32)
         on left: 15 16
         on right: 11 14 16
-    parameter (31)
+    parameter (33)
         on left: 17
         on right: 13 15 16
-    body (32)
+    body (34)
         on left: 19
         on right: 5 7 9
-    $@4 (33)
+    $@4 (35)
         on left: 18
         on right: 19
-    variable_list (34)
+    variable_list (36)
         on left: 20 21
         on right: 19 21
-    variable (35)
+    variable (37)
         on left: 22
         on right: 21
-    statement_list (36)
+    statement_list (38)
         on left: 23 24
         on right: 19 24 29
-    statement (37)
+    statement (39)
         on left: 25 26 27 28
         on right: 24 46 49
-    compound_statement (38)
+    compound_statement (40)
         on left: 29
         on right: 25
-    assignment_statement (39)
+    assignment_statement (41)
         on left: 30
         on right: 26
-    num_exp <i> (40)
+    num_exp <i> (42)
         on left: 31 32
         on right: 30 32 36 44 50 51
-    exp <i> (41)
+    exp <i> (43)
         on left: 33 34 35 36
         on right: 31 32
-    literal <i> (42)
+    literal <i> (44)
         on left: 37
         on right: 33
-    function_call <i> (43)
+    function_call <i> (45)
         on left: 39
         on right: 35
-    $@5 (44)
+    $@5 (46)
         on left: 38
         on right: 39
-    arguments <i> (45)
+    arguments <i> (47)
         on left: 40 41
         on right: 39
-    argument_list <i> (46)
+    argument_list <i> (48)
         on left: 42 43
         on right: 41 43
-    argument <i> (47)
+    argument <i> (49)
         on left: 44
         on right: 42 43
-    if_statement (48)
+    if_statement (50)
         on left: 45 46
         on right: 27
-    if_part <i> (49)
+    if_part <i> (51)
         on left: 49
         on right: 45 46
-    @6 (50)
+    @6 (52)
         on left: 47
         on right: 49
-    $@7 (51)
+    $@7 (53)
         on left: 48
         on right: 49
-    rel_exp <i> (52)
+    rel_exp <i> (54)
         on left: 50
         on right: 49
-    return_statement (53)
+    return_statement (55)
         on left: 51
         on right: 28
 

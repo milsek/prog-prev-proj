@@ -12,8 +12,8 @@ const add = function(a, b) {
 }
 
 function main() {
-    var m;
-    var n;
+    const m;
+    let n;
     m = increment(1);
     n = add(1, 2);
     return m + n;

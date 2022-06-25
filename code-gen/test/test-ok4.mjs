@@ -1,4 +1,6 @@
+//OPIS: IF ELSE
 //RETURN: 5
 function main() {
-    return 5;
+    if (5 > 3) return 5;
+    else return 3;
 }

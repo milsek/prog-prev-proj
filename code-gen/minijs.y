@@ -32,6 +32,9 @@
 %token _FUNCDEC
 %token _ARROW
 %token _COMMA
+%token _QMARK
+%token _COLON
+
 
 %token _IF
 %token _ELSE
@@ -187,7 +190,7 @@ variable_list
 variable
   : _VARDEC _ID _SEMICOLON
       {
-        if(lookup_symbol($2, VAR|PAR|LET|CONST) == NO_INDEX)
+        if(lookup_symbol($2, PAR|LET|CONST) == NO_INDEX)
            insert_symbol($2, $1, NUMBER, ++var_num, NO_ATR);
         else 
            err("redefinition of '%s'", $2);
@@ -214,7 +217,7 @@ assignment_statement
   : _ID _ASSIGN num_exp _SEMICOLON
       {
         // const cannot be assigned again
-        int idx = lookup_symbol($1, VAR|PAR|LET|CONST);
+        int idx = lookup_symbol($1, PAR|LET|CONST);
         if(idx == NO_INDEX)
           err("invalid lvalue '%s' in assignment", $1);
         // else
@@ -253,7 +256,7 @@ exp
   : literal
   | _ID
       {
-        $$ = lookup_symbol($1, VAR|PAR|LET|CONST);
+        $$ = lookup_symbol($1, PAR|LET|CONST);
         if (get_kind($$) == PAR) {
           set_atr1($$, get_atr1(fun_idx) - get_atr1($$));
         }
@@ -313,7 +316,7 @@ argument_list
 
 argument
   : num_exp
-    { 
+    {
       // if(get_atr2(fcall_idx) != get_type($1))
       //   err("incompatible type for argument");
       free_if_reg($1);

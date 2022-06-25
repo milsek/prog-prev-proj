@@ -10,7 +10,6 @@
 
 [ \t\n]+             { /* skip */ }
 
-"var"                { yylval.i = VAR; return _VARDEC; }
 "let"                { yylval.i = LET; return _VARDEC; }
 "const"              { yylval.i = CONST; return _VARDEC; }
 "if"                 { return _IF; }
@@ -19,6 +18,8 @@
 "function"           { return _FUNCDEC; }
 
 "=>"                 { return _ARROW; }
+"?"                  { return _QMARK; }
+":"                  { return _COLON; }
 
 "("                  { return _LPAREN; }
 ")"                  { return _RPAREN; }
