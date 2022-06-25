@@ -1,6 +1,10 @@
-//OPIS: IF ELSE
+//OPIS: if else and global variables
 //RETURN: 5
+let a;
+const b;
 function main() {
-    if (5 > 3) return 5;
-    else return 3;
+    a = 5;
+    b = 3;
+    if (a > b) return a;
+    else return b;
 }

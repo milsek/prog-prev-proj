@@ -59,12 +59,33 @@
 %%
 
 program
-  : function_list
+  : global_list function_list
       {  
         if(lookup_symbol("main", FUN) == NO_INDEX)
           err("undefined reference to 'main'");
       }
   ;
+
+global_list
+  : /* empty */
+  | global_list global_var
+  ;
+global_var
+  : _VARDEC _ID _SEMICOLON
+      {
+        int idx = lookup_symbol($2, GLET|GCONST);
+        if (idx != NO_INDEX) {
+          err("redefinition of '%s'", $2);
+        }
+        else {
+          if ($1 == LET)
+            insert_symbol($2, GLET, NUMBER, NO_ATR, NO_ATR);
+          else if ($1 == CONST)
+            insert_symbol($2, GCONST, NUMBER, NO_ATR, NO_ATR);
+          code("\n%s:\n\t\tWORD\t1", $2);
+        }
+      }
+;
 
 function_list
   : function
@@ -217,13 +238,10 @@ assignment_statement
   : _ID _ASSIGN num_exp _SEMICOLON
       {
         // const cannot be assigned again
-        int idx = lookup_symbol($1, PAR|LET|CONST);
+        int idx = lookup_symbol($1, PAR|LET|CONST|GLET|GCONST);
         if(idx == NO_INDEX)
           err("invalid lvalue '%s' in assignment", $1);
-        // else
-        //   if(get_type(idx) != get_type($3))
-        //     err("incompatible types in assignment");
-        if (get_atr2(idx) == 1 && get_kind(idx) == CONST) {
+        if (get_atr2(idx) == 1 && (get_kind(idx) == CONST || get_kind(idx) == GCONST)) {
           err("Cannot reassign const value!");
         }
         set_atr2(idx, 1);
@@ -256,7 +274,7 @@ exp
   : literal
   | _ID
       {
-        $$ = lookup_symbol($1, PAR|LET|CONST);
+        $$ = lookup_symbol($1, PAR|LET|CONST|GLET|GCONST);
         if (get_kind($$) == PAR) {
           set_atr1($$, get_atr1(fun_idx) - get_atr1($$));
         }
