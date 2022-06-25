@@ -106,7 +106,7 @@ function
         code("\n\t\tPUSH\t%%14");
         code("\n\t\tMOV \t%%15,%%14");
       }
-    _LPAREN parameters _RPAREN _ARROW body
+    arrow_parameters _ARROW body
       {
         clear_symbols(fun_idx + 1);
         var_num = 0;
@@ -122,6 +122,13 @@ parameters
   : /* empty */
       { set_atr1(fun_idx, 0); }
   | parameter_list
+  ;
+
+arrow_parameters
+  : _LPAREN /* empty */ _RPAREN
+      { set_atr1(fun_idx, 0); }
+  | parameter
+  | _LPAREN parameter_list _RPAREN
   ;
 
 parameter_list

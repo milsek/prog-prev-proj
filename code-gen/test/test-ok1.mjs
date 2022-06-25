@@ -1,6 +1,10 @@
+//OPIS: arrow function single param
 //RETURN: 10
-function main() {
-    let x;
-    x = 10;
-    return x;
+const f1 = q => {
+	return q;
 }
+
+function main() {
+	return f1(10);
+}
+
