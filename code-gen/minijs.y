@@ -16,6 +16,7 @@
   int error_count = 0;
   int warning_count = 0;
   int var_num = 0;
+  int arg_num = 0;
   int fun_idx = -1;
   int fcall_idx = -1;
   int lab_num = -1;
@@ -29,6 +30,9 @@
 
 %token _VARDEC
 %token _FUNCDEC
+%token _ARROW
+%token _COMMA
+
 %token _IF
 %token _ELSE
 %token _RETURN
@@ -44,7 +48,7 @@
 %token <i> _RELOP
 
 %type <i> num_exp exp literal
-%type <i> function_call argument rel_exp if_part
+%type <i> function_call argument rel_exp if_part arguments argument_list
 
 %nonassoc ONLY_IF
 %nonassoc _ELSE
@@ -73,11 +77,36 @@ function
         else 
           err("redefinition of function '%s'", $2);
 
+        arg_num = 0;
         code("\n%s:", $2);
         code("\n\t\tPUSH\t%%14");
         code("\n\t\tMOV \t%%15,%%14");
       }
-    _LPAREN parameter _RPAREN body
+    _LPAREN parameters _RPAREN body
+      {
+        clear_symbols(fun_idx + 1);
+        var_num = 0;
+        
+        code("\n@%s_exit:", $2);
+        code("\n\t\tMOV \t%%14,%%15");
+        code("\n\t\tPOP \t%%14");
+        code("\n\t\tRET");
+      }
+
+  | _VARDEC _ID _ASSIGN
+      {
+        fun_idx = lookup_symbol($2, FUN);
+        if(fun_idx == NO_INDEX)
+          fun_idx = insert_symbol($2, FUN, NUMBER, NO_ATR, NO_ATR);
+        else 
+          err("redefinition of function '%s'", $2);
+
+        arg_num = 0;
+        code("\n%s:", $2);
+        code("\n\t\tPUSH\t%%14");
+        code("\n\t\tMOV \t%%15,%%14");
+      }
+    _LPAREN parameters _RPAREN _ARROW body
       {
         clear_symbols(fun_idx + 1);
         var_num = 0;
@@ -89,14 +118,22 @@ function
       }
   ;
 
-parameter
+parameters
   : /* empty */
       { set_atr1(fun_idx, 0); }
+  | parameter_list
+  ;
 
-  | _ID
+parameter_list
+  : parameter
+  | parameter_list _COMMA parameter
+  ;
+
+parameter
+  : _ID
       {
-        insert_symbol($1, PAR, NUMBER, 1, NO_ATR);
-        set_atr1(fun_idx, 1);
+        insert_symbol($1, PAR, NUMBER, get_atr1(fun_idx) + 1, NO_ATR);
+        set_atr1(fun_idx, get_atr1(fun_idx) + 1);
         set_atr2(fun_idx, NUMBER);
       }
   ;
@@ -119,7 +156,7 @@ variable_list
 variable
   : _VARDEC _ID _SEMICOLON
       {
-        if(lookup_symbol($2, VAR|PAR) == NO_INDEX)
+        if(lookup_symbol($2, VAR|PAR|LET|CONST) == NO_INDEX)
            insert_symbol($2, VAR, NUMBER, ++var_num, NO_ATR);
         else 
            err("redefinition of '%s'", $2);
@@ -145,7 +182,8 @@ compound_statement
 assignment_statement
   : _ID _ASSIGN num_exp _SEMICOLON
       {
-        int idx = lookup_symbol($1, VAR|PAR);
+        // const cannot be assigned again
+        int idx = lookup_symbol($1, VAR|PAR|LET);
         if(idx == NO_INDEX)
           err("invalid lvalue '%s' in assignment", $1);
         // else
@@ -178,10 +216,12 @@ num_exp
 
 exp
   : literal
-
   | _ID
       {
-        $$ = lookup_symbol($1, VAR|PAR);
+        $$ = lookup_symbol($1, VAR|PAR|LET|CONST);
+        if (get_kind($$) == PAR) {
+          set_atr1($$, get_atr1(fun_idx) - get_atr1($$));
+        }
         if($$ == NO_INDEX)
           err("'%s' undeclared", $1);
       }
@@ -198,7 +238,9 @@ exp
 
 literal
   : _NUMBER
-      { $$ = insert_literal($1, NUMBER); }
+      { 
+        $$ = insert_literal($1, NUMBER);
+      }
   ;
 
 function_call
@@ -208,10 +250,10 @@ function_call
         if(fcall_idx == NO_INDEX)
           err("'%s' is not a function", $1);
       }
-    _LPAREN argument _RPAREN
+    _LPAREN arguments _RPAREN
       {
         if(get_atr1(fcall_idx) != $4)
-          err("wrong number of arguments");
+          err("wrong number of arguments. should be %d, but given %d", get_atr1(fcall_idx), $4 );
         code("\n\t\t\tCALL\t%s", get_name(fcall_idx));
         if($4 > 0)
           code("\n\t\t\tADDS\t%%15,$%d,%%15", $4 * 4);
@@ -220,11 +262,22 @@ function_call
       }
   ;
 
-argument
+arguments
   : /* empty */
     { $$ = 0; }
+  | argument_list
+    {
+      $$ = $1;
+    }
+  ;
 
-  | num_exp
+argument_list
+  : argument { $$ = 1; }
+  | argument_list _COMMA argument { $$ = $$ + 1; }
+  ;
+
+argument
+  : num_exp
     { 
       // if(get_atr2(fcall_idx) != get_type($1))
       //   err("incompatible type for argument");

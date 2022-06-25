@@ -10,6 +10,7 @@
 
 [ \t\n]+             { /* skip */ }
 
+"var"                { return _VARDEC; }
 "let"                { return _VARDEC; }
 "const"              { return _VARDEC; }
 "if"                 { return _IF; }
@@ -17,11 +18,14 @@
 "return"             { return _RETURN; }
 "function"           { return _FUNCDEC; }
 
+"=>"                 { return _ARROW; }
+
 "("                  { return _LPAREN; }
 ")"                  { return _RPAREN; }
 "{"                  { return _LBRACKET; }
 "}"                  { return _RBRACKET; }
 ";"                  { return _SEMICOLON; }
+","                  { return _COMMA; }
 "="                  { return _ASSIGN; }
 
 "+"                  { yylval.i = ADD; return _AROP; }
@@ -33,6 +37,7 @@
 ">="                 { yylval.i = GE; return _RELOP; }
 "=="                 { yylval.i = EQ; return _RELOP; }
 "!="                 { yylval.i = NE; return _RELOP; }
+
 
 [a-zA-Z][a-zA-Z0-9]* { yylval.s = strdup(yytext); 
                        return _ID; }

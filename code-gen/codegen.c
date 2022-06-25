@@ -37,11 +37,13 @@ void free_if_reg(int reg_index) {
 // SYMBOL
 void gen_sym_name(int index) {
   if(index > -1) {
-    if(get_kind(index) == VAR) // -n*4(%14)
+    if(get_kind(index) == VAR ||
+      get_kind(index) == LET ||
+      get_kind(index) == CONST) // -n*4(%14)
       code("-%d(%%14)", get_atr1(index) * 4);
     else 
       if(get_kind(index) == PAR) // m*4(%14)
-        code("%d(%%14)", 4 + get_atr1(index) *4);
+        code("%d(%%14)", 8 + get_atr1(index) *4);
       else
         if(get_kind(index) == LIT)
           code("$%s", get_name(index));

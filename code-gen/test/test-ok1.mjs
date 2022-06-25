@@ -1,6 +1,6 @@
 //RETURN: 10
 function main() {
-    const x;
+    let x;
     x = 10;
     return x;
 }

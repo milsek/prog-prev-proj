@@ -1,4 +1,11 @@
+//OPIS: arrow function
 //RETURN: 1
+const f1 = (q, r, s) => {
+	let m;
+	m = s - r - q;
+	return m;
+}
+
 function main() {
-	return 1;
+	return f1(2, 4, 7);
 }

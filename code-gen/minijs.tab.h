@@ -56,20 +56,22 @@ extern int yydebug;
     YYUNDEF = 257,                 /* "invalid token"  */
     _VARDEC = 258,                 /* _VARDEC  */
     _FUNCDEC = 259,                /* _FUNCDEC  */
-    _IF = 260,                     /* _IF  */
-    _ELSE = 261,                   /* _ELSE  */
-    _RETURN = 262,                 /* _RETURN  */
-    _ID = 263,                     /* _ID  */
-    _NUMBER = 264,                 /* _NUMBER  */
-    _LPAREN = 265,                 /* _LPAREN  */
-    _RPAREN = 266,                 /* _RPAREN  */
-    _LBRACKET = 267,               /* _LBRACKET  */
-    _RBRACKET = 268,               /* _RBRACKET  */
-    _ASSIGN = 269,                 /* _ASSIGN  */
-    _SEMICOLON = 270,              /* _SEMICOLON  */
-    _AROP = 271,                   /* _AROP  */
-    _RELOP = 272,                  /* _RELOP  */
-    ONLY_IF = 273                  /* ONLY_IF  */
+    _ARROW = 260,                  /* _ARROW  */
+    _COMMA = 261,                  /* _COMMA  */
+    _IF = 262,                     /* _IF  */
+    _ELSE = 263,                   /* _ELSE  */
+    _RETURN = 264,                 /* _RETURN  */
+    _ID = 265,                     /* _ID  */
+    _NUMBER = 266,                 /* _NUMBER  */
+    _LPAREN = 267,                 /* _LPAREN  */
+    _RPAREN = 268,                 /* _RPAREN  */
+    _LBRACKET = 269,               /* _LBRACKET  */
+    _RBRACKET = 270,               /* _RBRACKET  */
+    _ASSIGN = 271,                 /* _ASSIGN  */
+    _SEMICOLON = 272,              /* _SEMICOLON  */
+    _AROP = 273,                   /* _AROP  */
+    _RELOP = 274,                  /* _RELOP  */
+    ONLY_IF = 275                  /* ONLY_IF  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -78,12 +80,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 25 "minijs.y"
+#line 26 "minijs.y"
 
   int i;
   char *s;
 
-#line 87 "minijs.tab.h"
+#line 89 "minijs.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
