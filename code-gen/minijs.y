@@ -27,13 +27,13 @@
   char *s;
 }
 
-%token <i> _TYPE
+%token _VARDEC
+%token _FUNCDEC
 %token _IF
 %token _ELSE
 %token _RETURN
 %token <s> _ID
-%token <s> _INT_NUMBER
-%token <s> _UINT_NUMBER
+%token <s> _NUMBER
 %token _LPAREN
 %token _RPAREN
 %token _LBRACKET
@@ -65,11 +65,11 @@ function_list
   ;
 
 function
-  : _TYPE _ID
+  : _FUNCDEC _ID
       {
         fun_idx = lookup_symbol($2, FUN);
         if(fun_idx == NO_INDEX)
-          fun_idx = insert_symbol($2, FUN, $1, NO_ATR, NO_ATR);
+          fun_idx = insert_symbol($2, FUN, NUMBER, NO_ATR, NO_ATR);
         else 
           err("redefinition of function '%s'", $2);
 
@@ -93,11 +93,11 @@ parameter
   : /* empty */
       { set_atr1(fun_idx, 0); }
 
-  | _TYPE _ID
+  | _ID
       {
-        insert_symbol($2, PAR, $1, 1, NO_ATR);
+        insert_symbol($1, PAR, NUMBER, 1, NO_ATR);
         set_atr1(fun_idx, 1);
-        set_atr2(fun_idx, $1);
+        set_atr2(fun_idx, NUMBER);
       }
   ;
 
@@ -117,10 +117,10 @@ variable_list
   ;
 
 variable
-  : _TYPE _ID _SEMICOLON
+  : _VARDEC _ID _SEMICOLON
       {
         if(lookup_symbol($2, VAR|PAR) == NO_INDEX)
-           insert_symbol($2, VAR, $1, ++var_num, NO_ATR);
+           insert_symbol($2, VAR, NUMBER, ++var_num, NO_ATR);
         else 
            err("redefinition of '%s'", $2);
       }
@@ -148,9 +148,9 @@ assignment_statement
         int idx = lookup_symbol($1, VAR|PAR);
         if(idx == NO_INDEX)
           err("invalid lvalue '%s' in assignment", $1);
-        else
-          if(get_type(idx) != get_type($3))
-            err("incompatible types in assignment");
+        // else
+        //   if(get_type(idx) != get_type($3))
+        //     err("incompatible types in assignment");
         gen_mov($3, idx);
       }
   ;
@@ -197,11 +197,8 @@ exp
   ;
 
 literal
-  : _INT_NUMBER
-      { $$ = insert_literal($1, INT); }
-
-  | _UINT_NUMBER
-      { $$ = insert_literal($1, UINT); }
+  : _NUMBER
+      { $$ = insert_literal($1, NUMBER); }
   ;
 
 function_call
@@ -229,8 +226,8 @@ argument
 
   | num_exp
     { 
-      if(get_atr2(fcall_idx) != get_type($1))
-        err("incompatible type for argument");
+      // if(get_atr2(fcall_idx) != get_type($1))
+      //   err("incompatible type for argument");
       free_if_reg($1);
       code("\n\t\t\tPUSH\t");
       gen_sym_name($1);
@@ -278,8 +275,8 @@ rel_exp
 return_statement
   : _RETURN num_exp _SEMICOLON
       {
-        if(get_type(fun_idx) != get_type($2))
-          err("incompatible types in return");
+        // if(get_type(fun_idx) != get_type($2))
+        //   err("incompatible types in return");
         gen_mov($2, FUN_REG);
         code("\n\t\tJMP \t@%s_exit", get_name(fun_idx));        
       }

@@ -10,11 +10,12 @@
 
 [ \t\n]+             { /* skip */ }
 
-"int"                { yylval.i = INT;  return _TYPE; }
-"unsigned"           { yylval.i = UINT; return _TYPE; }
+"let"                { return _VARDEC; }
+"const"              { return _VARDEC; }
 "if"                 { return _IF; }
 "else"               { return _ELSE; }
 "return"             { return _RETURN; }
+"function"           { return _FUNCDEC; }
 
 "("                  { return _LPAREN; }
 ")"                  { return _RPAREN; }
@@ -36,10 +37,7 @@
 [a-zA-Z][a-zA-Z0-9]* { yylval.s = strdup(yytext); 
                        return _ID; }
 [+-]?[0-9]{1,10}     { yylval.s = strdup(yytext); 
-                       return _INT_NUMBER;}
-[0-9]{1,10}[uU]      { yylval.s = strdup(yytext); 
-                       yylval.s[yyleng-1] = 0;
-                       return _UINT_NUMBER;}
+                       return _NUMBER;}
 
 \/\/.*               { /* skip */ }
 .                    { printf("line %d: LEXICAL ERROR on char %c\n", yylineno, *yytext);}

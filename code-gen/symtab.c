@@ -52,8 +52,7 @@ int insert_literal(char *str, unsigned type) {
 
   // provera opsega za konstante
   long int num = atol(str);
-  if(((type==INT) && (num<INT_MIN || num>INT_MAX) )
-    || ((type==UINT) && (num<0 || num>UINT_MAX)) )  
+  if(( (type==NUMBER) && (num<INT_MIN || num>INT_MAX) ))  
       err("literal out of range");
   idx = insert_symbol(str, LIT, type, NO_ATR, NO_ATR);
   return idx;
