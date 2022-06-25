@@ -7,4 +7,3 @@ const f1 = q => {
 function main() {
 	return f1(10);
 }
-

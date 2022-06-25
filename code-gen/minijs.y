@@ -116,6 +116,30 @@ function
         code("\n\t\tPOP \t%%14");
         code("\n\t\tRET");
       }
+
+    | _VARDEC _ID _ASSIGN
+      {
+        fun_idx = lookup_symbol($2, FUN);
+        if(fun_idx == NO_INDEX)
+          fun_idx = insert_symbol($2, FUN, NUMBER, NO_ATR, NO_ATR);
+        else 
+          err("redefinition of function '%s'", $2);
+
+        arg_num = 0;
+        code("\n%s:", $2);
+        code("\n\t\tPUSH\t%%14");
+        code("\n\t\tMOV \t%%15,%%14");
+      }
+    _FUNCDEC _LPAREN parameters _RPAREN body
+      {
+        clear_symbols(fun_idx + 1);
+        var_num = 0;
+        
+        code("\n@%s_exit:", $2);
+        code("\n\t\tMOV \t%%14,%%15");
+        code("\n\t\tPOP \t%%14");
+        code("\n\t\tRET");
+      }
   ;
 
 parameters
