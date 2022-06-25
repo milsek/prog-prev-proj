@@ -92,7 +92,7 @@ Terminals, with rules where they appear
 
     $end (0) 0
     error (256)
-    _VARDEC (258) 7 9 22
+    _VARDEC <i> (258) 7 9 22
     _FUNCDEC (259) 5 9
     _ARROW (260) 7
     _COMMA (261) 16 43

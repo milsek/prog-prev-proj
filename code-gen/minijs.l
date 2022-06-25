@@ -10,9 +10,9 @@
 
 [ \t\n]+             { /* skip */ }
 
-"var"                { return _VARDEC; }
-"let"                { return _VARDEC; }
-"const"              { return _VARDEC; }
+"var"                { yylval.i = VAR; return _VARDEC; }
+"let"                { yylval.i = LET; return _VARDEC; }
+"const"              { yylval.i = CONST; return _VARDEC; }
 "if"                 { return _IF; }
 "else"               { return _ELSE; }
 "return"             { return _RETURN; }

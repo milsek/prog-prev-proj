@@ -28,7 +28,7 @@
   char *s;
 }
 
-%token _VARDEC
+%token <i> _VARDEC
 %token _FUNCDEC
 %token _ARROW
 %token _COMMA
@@ -188,7 +188,7 @@ variable
   : _VARDEC _ID _SEMICOLON
       {
         if(lookup_symbol($2, VAR|PAR|LET|CONST) == NO_INDEX)
-           insert_symbol($2, VAR, NUMBER, ++var_num, NO_ATR);
+           insert_symbol($2, $1, NUMBER, ++var_num, NO_ATR);
         else 
            err("redefinition of '%s'", $2);
       }
@@ -214,12 +214,16 @@ assignment_statement
   : _ID _ASSIGN num_exp _SEMICOLON
       {
         // const cannot be assigned again
-        int idx = lookup_symbol($1, VAR|PAR|LET);
+        int idx = lookup_symbol($1, VAR|PAR|LET|CONST);
         if(idx == NO_INDEX)
           err("invalid lvalue '%s' in assignment", $1);
         // else
         //   if(get_type(idx) != get_type($3))
         //     err("incompatible types in assignment");
+        if (get_atr2(idx) == 1 && get_kind(idx) == CONST) {
+          err("Cannot reassign const value!");
+        }
+        set_atr2(idx, 1);
         gen_mov($3, idx);
       }
   ;

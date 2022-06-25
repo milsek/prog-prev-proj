@@ -1,4 +1,9 @@
+//OPIS: reassigning const value
 //RETURN: 10
+
 function main() {
-    return 10;
+    const m;
+    m = 5;
+    m = 10;
+    return m;
 }

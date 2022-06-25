@@ -815,17 +815,17 @@ YY_RULE_SETUP
 case 2:
 YY_RULE_SETUP
 #line 13 "minijs.l"
-{ return _VARDEC; }
+{ yylval.i = VAR; return _VARDEC; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
 #line 14 "minijs.l"
-{ return _VARDEC; }
+{ yylval.i = LET; return _VARDEC; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
 #line 15 "minijs.l"
-{ return _VARDEC; }
+{ yylval.i = CONST; return _VARDEC; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
