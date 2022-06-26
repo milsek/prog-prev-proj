@@ -40,6 +40,12 @@ function main() {
   b = 10;
 }
 ```
+### Multiplication
+The compiler supports the multiplication operation. It allows both positive and negative operands.
+```js
+const a = -5;
+return 7 * a;  // -35
+```
 ### Post-increment and post-decrement **statements**
 The post-increment (++) and post-decrement (--) statements are allowed but just as that - statements. 
 ```js
