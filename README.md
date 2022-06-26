@@ -1,6 +1,6 @@
 # Mini JavaScript compiler
 
- - Technologies used: **Bison** + **Flex**
+ - Technologies used: **Bison** + **Flex** + **Hipsim**
  - Translates simplified JS into a mock Assembly language
 
 ## Features
