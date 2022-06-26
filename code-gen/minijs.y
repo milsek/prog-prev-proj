@@ -429,6 +429,9 @@ num_exp
           code("\n\t\tJMP\t@mul_neg_%d", mul_num);
 
           code("\n@end_mul_%d:", mul_num);
+          free_if_reg($3);
+          free_if_reg($1);
+          free_if_reg(counter);
         }
       }
   ;

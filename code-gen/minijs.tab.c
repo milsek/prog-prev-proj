@@ -588,9 +588,9 @@ static const yytype_int16 yyrline[] =
      193,   197,   207,   206,   216,   217,   221,   231,   244,   245,
      249,   250,   251,   252,   253,   254,   255,   256,   257,   262,
      269,   261,   281,   290,   299,   317,   335,   339,   353,   355,
-     437,   438,   447,   452,   454,   472,   477,   481,   489,   488,
-     508,   509,   516,   517,   521,   531,   534,   540,   545,   539,
-     558,   568
+     440,   441,   450,   455,   457,   475,   480,   484,   492,   491,
+     511,   512,   519,   520,   524,   534,   537,   543,   548,   542,
+     561,   571
 };
 #endif
 
@@ -1600,13 +1600,16 @@ yyreduce:
           code("\n\t\tJMP\t@mul_neg_%d", mul_num);
 
           code("\n@end_mul_%d:", mul_num);
+          free_if_reg((yyvsp[0].i));
+          free_if_reg((yyvsp[-2].i));
+          free_if_reg(counter);
         }
       }
-#line 1606 "minijs.tab.c"
+#line 1609 "minijs.tab.c"
     break;
 
   case 51: /* exp: _ID  */
-#line 439 "minijs.y"
+#line 442 "minijs.y"
       {
         (yyval.i) = lookup_symbol((yyvsp[0].s), PAR|LET|CONST|GLET|GCONST);
         if (get_kind((yyval.i)) == PAR) {
@@ -1615,26 +1618,26 @@ yyreduce:
         if((yyval.i) == NO_INDEX)
           err("'%s' undeclared", (yyvsp[0].s));
       }
-#line 1619 "minijs.tab.c"
+#line 1622 "minijs.tab.c"
     break;
 
   case 52: /* exp: function_call  */
-#line 448 "minijs.y"
+#line 451 "minijs.y"
       {
         (yyval.i) = take_reg();
         gen_mov(FUN_REG, (yyval.i));
       }
-#line 1628 "minijs.tab.c"
+#line 1631 "minijs.tab.c"
     break;
 
   case 53: /* exp: _LPAREN num_exp _RPAREN  */
-#line 453 "minijs.y"
+#line 456 "minijs.y"
       { (yyval.i) = (yyvsp[-1].i); }
-#line 1634 "minijs.tab.c"
+#line 1637 "minijs.tab.c"
     break;
 
   case 54: /* exp: _LPAREN rel_exp _RPAREN _QMARK ternary_exp _COLON ternary_exp  */
-#line 455 "minijs.y"
+#line 458 "minijs.y"
       {
         int out = take_reg();
         lab_num++;
@@ -1649,38 +1652,38 @@ yyreduce:
         code("\n@exit%d:", lab_num);
         (yyval.i) = out;
       }
-#line 1653 "minijs.tab.c"
+#line 1656 "minijs.tab.c"
     break;
 
   case 55: /* ternary_exp: _ID  */
-#line 473 "minijs.y"
+#line 476 "minijs.y"
       {
         if(((yyval.i) = lookup_symbol((yyvsp[0].s), (LET|CONST|PAR|GLET|GCONST))) == NO_INDEX )
           err("'%s' undeclared", (yyvsp[0].s));
       }
-#line 1662 "minijs.tab.c"
+#line 1665 "minijs.tab.c"
     break;
 
   case 57: /* literal: _NUMBER  */
-#line 482 "minijs.y"
+#line 485 "minijs.y"
       { 
         (yyval.i) = insert_literal((yyvsp[0].s), NUMBER);
       }
-#line 1670 "minijs.tab.c"
+#line 1673 "minijs.tab.c"
     break;
 
   case 58: /* $@7: %empty  */
-#line 489 "minijs.y"
+#line 492 "minijs.y"
       {
         fcall_idx = lookup_symbol((yyvsp[0].s), FUN);
         if(fcall_idx == NO_INDEX)
           err("'%s' is not a function", (yyvsp[0].s));
       }
-#line 1680 "minijs.tab.c"
+#line 1683 "minijs.tab.c"
     break;
 
   case 59: /* function_call: _ID $@7 _LPAREN arguments _RPAREN  */
-#line 495 "minijs.y"
+#line 498 "minijs.y"
       {
         if(get_atr1(fcall_idx) != (yyvsp[-1].i))
           err("wrong number of arguments. should be %d, but %d were given.", get_atr1(fcall_idx), (yyvsp[-1].i) );
@@ -1690,110 +1693,110 @@ yyreduce:
         set_type(FUN_REG, get_type(fcall_idx));
         (yyval.i) = FUN_REG;
       }
-#line 1694 "minijs.tab.c"
+#line 1697 "minijs.tab.c"
     break;
 
   case 60: /* arguments: %empty  */
-#line 508 "minijs.y"
+#line 511 "minijs.y"
     { (yyval.i) = 0; }
-#line 1700 "minijs.tab.c"
+#line 1703 "minijs.tab.c"
     break;
 
   case 61: /* arguments: argument_list  */
-#line 510 "minijs.y"
+#line 513 "minijs.y"
     {
       (yyval.i) = (yyvsp[0].i);
     }
-#line 1708 "minijs.tab.c"
+#line 1711 "minijs.tab.c"
     break;
 
   case 62: /* argument_list: argument  */
-#line 516 "minijs.y"
+#line 519 "minijs.y"
              { (yyval.i) = 1; }
-#line 1714 "minijs.tab.c"
+#line 1717 "minijs.tab.c"
     break;
 
   case 63: /* argument_list: argument_list _COMMA argument  */
-#line 517 "minijs.y"
+#line 520 "minijs.y"
                                   { (yyval.i) = (yyval.i) + 1; }
-#line 1720 "minijs.tab.c"
+#line 1723 "minijs.tab.c"
     break;
 
   case 64: /* argument: num_exp  */
-#line 522 "minijs.y"
+#line 525 "minijs.y"
     {
       free_if_reg((yyvsp[0].i));
       code("\n\t\t\tPUSH\t");
       gen_sym_name((yyvsp[0].i));
       (yyval.i) = 1;
     }
-#line 1731 "minijs.tab.c"
+#line 1734 "minijs.tab.c"
     break;
 
   case 65: /* if_statement: if_part  */
-#line 532 "minijs.y"
+#line 535 "minijs.y"
       { code("\n@exit%d:", (yyvsp[0].i)); }
-#line 1737 "minijs.tab.c"
+#line 1740 "minijs.tab.c"
     break;
 
   case 66: /* if_statement: if_part _ELSE statement  */
-#line 535 "minijs.y"
+#line 538 "minijs.y"
       { code("\n@exit%d:", (yyvsp[-2].i)); }
-#line 1743 "minijs.tab.c"
+#line 1746 "minijs.tab.c"
     break;
 
   case 67: /* @8: %empty  */
-#line 540 "minijs.y"
+#line 543 "minijs.y"
       {
         (yyval.i) = ++lab_num;
         code("\n@if%d:", lab_num);
       }
-#line 1752 "minijs.tab.c"
+#line 1755 "minijs.tab.c"
     break;
 
   case 68: /* $@9: %empty  */
-#line 545 "minijs.y"
+#line 548 "minijs.y"
       {
         code("\n\t\t%s\t@false%d", opp_jumps[(yyvsp[0].i)], (yyvsp[-1].i));
         code("\n@true%d:", (yyvsp[-1].i));
       }
-#line 1761 "minijs.tab.c"
+#line 1764 "minijs.tab.c"
     break;
 
   case 69: /* if_part: _IF _LPAREN @8 rel_exp $@9 _RPAREN statement  */
-#line 550 "minijs.y"
+#line 553 "minijs.y"
       {
         code("\n\t\tJMP \t@exit%d", (yyvsp[-4].i));
         code("\n@false%d:", (yyvsp[-4].i));
         (yyval.i) = (yyvsp[-4].i);
       }
-#line 1771 "minijs.tab.c"
+#line 1774 "minijs.tab.c"
     break;
 
   case 70: /* rel_exp: num_exp _RELOP num_exp  */
-#line 559 "minijs.y"
+#line 562 "minijs.y"
       {
         if(get_type((yyvsp[-2].i)) != get_type((yyvsp[0].i)))
           err("invalid operands: relational operator");
         (yyval.i) = (yyvsp[-1].i) + ((get_type((yyvsp[-2].i)) - 1) * RELOP_NUMBER);
         gen_cmp((yyvsp[-2].i), (yyvsp[0].i));
       }
-#line 1782 "minijs.tab.c"
+#line 1785 "minijs.tab.c"
     break;
 
   case 71: /* return_statement: _RETURN num_exp _SEMICOLON  */
-#line 569 "minijs.y"
+#line 572 "minijs.y"
       {
         // if(get_type(fun_idx) != get_type($2))
         //   err("incompatible types in return");
         gen_mov((yyvsp[-1].i), FUN_REG);
         code("\n\t\tJMP \t@%s_exit", get_name(fun_idx));        
       }
-#line 1793 "minijs.tab.c"
+#line 1796 "minijs.tab.c"
     break;
 
 
-#line 1797 "minijs.tab.c"
+#line 1800 "minijs.tab.c"
 
       default: break;
     }
@@ -1986,7 +1989,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 577 "minijs.y"
+#line 580 "minijs.y"
 
 
 int yyerror(char *s) {
