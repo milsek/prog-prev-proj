@@ -23,6 +23,7 @@
   int while_num = -1;
   int current_while = -1;
   int parent_while = -1;
+  int mul_num = -1;
   FILE *output;
 %}
 
@@ -355,17 +356,80 @@ num_exp
       {
         if(get_type($1) != get_type($3))
           err("invalid operands: arithmetic operation");
-        int t1 = get_type($1);    
-        code("\n\t\t%s\t", ar_instructions[$2 + (t1 - 1) * AROP_NUMBER]);
-        gen_sym_name($1);
-        code(",");
-        gen_sym_name($3);
-        code(",");
-        free_if_reg($3);
-        free_if_reg($1);
-        $$ = take_reg();
-        gen_sym_name($$);
-        set_type($$, t1);
+        if ($2 == ADD || $2 == SUB) {
+          int t1 = get_type($1);    
+          code("\n\t\t%s\t", ar_instructions[$2 + (t1 - 1) * AROP_NUMBER]);
+          gen_sym_name($1);
+          code(",");
+          gen_sym_name($3);
+          code(",");
+          free_if_reg($3);
+          free_if_reg($1);
+          $$ = take_reg();
+          gen_sym_name($$);
+          set_type($$, t1);
+        }
+        else if ($2 == MUL) {
+          int mul = ++mul_num;
+          int counter = take_reg();
+          $$ = take_reg();
+          gen_mov($3, counter);
+          code("\n\t\tMOV\t");
+          code("\t$0, ");
+          gen_sym_name($$);
+
+          code("\n@mul_%d:", mul_num);
+
+          code("\n\t\tCMPS \t");
+          gen_sym_name(counter);
+          code(", $0");
+          code("\n\t\tJLTS\t\t@mul_neg_%d", mul_num);
+
+          // positive multiplication
+          code("\n@mul_pos_%d:", mul_num);
+          code("\n\t\tCMPS \t");
+          gen_sym_name(counter);
+          code(", $0");
+          code("\n\t\tJEQ\t\t@end_mul_%d", mul_num);
+
+          code("\n\t\tADDS\t");
+          gen_sym_name($$);
+          code(", ");
+          gen_sym_name($1);
+          code(", ");
+          gen_sym_name($$);
+
+          code("\n\t\tSUBS\t");
+          gen_sym_name(counter);
+          code(", $1");
+          code(", ");
+          gen_sym_name(counter);
+          code("\n\t\tJMP\t@mul_pos_%d", mul_num);
+
+
+          // negative multiplication
+          code("\n@mul_neg_%d:", mul_num);
+          code("\n\t\tCMPS \t");
+          gen_sym_name(counter);
+          code(", $0");
+          code("\n\t\tJEQ\t\t@end_mul_%d", mul_num);
+
+          code("\n\t\tSUBS\t");
+          gen_sym_name($$);
+          code(", ");
+          gen_sym_name($1);
+          code(", ");
+          gen_sym_name($$);
+
+          code("\n\t\tADDS\t");
+          gen_sym_name(counter);
+          code(", $1");
+          code(", ");
+          gen_sym_name(counter);
+          code("\n\t\tJMP\t@mul_neg_%d", mul_num);
+
+          code("\n@end_mul_%d:", mul_num);
+        }
       }
   ;
 
