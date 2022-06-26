@@ -2,7 +2,7 @@
 //RETURN: 5
 
 const main = () => {
-    let i; let j; let k;
+    let i; let j;
     i = 0;
     j = 0;
     while (i < 10) {

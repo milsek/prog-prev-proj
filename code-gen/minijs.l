@@ -18,6 +18,7 @@
 "function"           { return _FUNCDEC; }
 "while"              { return _WHILE; }
 "break"              { return _BREAK; }
+"continue"           { return _CONTINUE; }
 
 "=>"                 { return _ARROW; }
 

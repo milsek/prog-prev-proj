@@ -37,6 +37,7 @@
 %token _COMMA
 %token _WHILE
 %token _BREAK
+%token _CONTINUE
 
 
 %token _IF
@@ -233,6 +234,7 @@ statement
   | return_statement
   | while_statement
   | break_statement
+  | continue_statement
   ;
 
 while_statement
@@ -260,6 +262,15 @@ break_statement
       {
         if (current_while > -1) {
           code("\n\t\tJMP\t@end_while_%d", current_while);
+        }
+      }
+  ;
+
+continue_statement
+  : _CONTINUE _SEMICOLON
+      {
+        if (current_while > -1) {
+          code("\n\t\tJMP\t@while_%d", current_while);
         }
       }
   ;
