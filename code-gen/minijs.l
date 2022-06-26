@@ -30,6 +30,9 @@
 ","                  { return _COMMA; }
 "="                  { return _ASSIGN; }
 
+"++"                  { return _POSTINCREMENT; }
+"--"                  { return _POSTDECREMENT; }
+
 "+"                  { yylval.i = ADD; return _AROP; }
 "-"                  { yylval.i = SUB; return _AROP; }
 

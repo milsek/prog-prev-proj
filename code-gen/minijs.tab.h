@@ -61,20 +61,22 @@ extern int yydebug;
     _WHILE = 262,                  /* _WHILE  */
     _BREAK = 263,                  /* _BREAK  */
     _CONTINUE = 264,               /* _CONTINUE  */
-    _IF = 265,                     /* _IF  */
-    _ELSE = 266,                   /* _ELSE  */
-    _RETURN = 267,                 /* _RETURN  */
-    _ID = 268,                     /* _ID  */
-    _NUMBER = 269,                 /* _NUMBER  */
-    _LPAREN = 270,                 /* _LPAREN  */
-    _RPAREN = 271,                 /* _RPAREN  */
-    _LBRACKET = 272,               /* _LBRACKET  */
-    _RBRACKET = 273,               /* _RBRACKET  */
-    _ASSIGN = 274,                 /* _ASSIGN  */
-    _SEMICOLON = 275,              /* _SEMICOLON  */
-    _AROP = 276,                   /* _AROP  */
-    _RELOP = 277,                  /* _RELOP  */
-    ONLY_IF = 278                  /* ONLY_IF  */
+    _POSTINCREMENT = 265,          /* _POSTINCREMENT  */
+    _POSTDECREMENT = 266,          /* _POSTDECREMENT  */
+    _IF = 267,                     /* _IF  */
+    _ELSE = 268,                   /* _ELSE  */
+    _RETURN = 269,                 /* _RETURN  */
+    _ID = 270,                     /* _ID  */
+    _NUMBER = 271,                 /* _NUMBER  */
+    _LPAREN = 272,                 /* _LPAREN  */
+    _RPAREN = 273,                 /* _RPAREN  */
+    _LBRACKET = 274,               /* _LBRACKET  */
+    _RBRACKET = 275,               /* _RBRACKET  */
+    _ASSIGN = 276,                 /* _ASSIGN  */
+    _SEMICOLON = 277,              /* _SEMICOLON  */
+    _AROP = 278,                   /* _AROP  */
+    _RELOP = 279,                  /* _RELOP  */
+    ONLY_IF = 280                  /* ONLY_IF  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -88,7 +90,7 @@ union YYSTYPE
   int i;
   char *s;
 
-#line 92 "minijs.tab.h"
+#line 94 "minijs.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

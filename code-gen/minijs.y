@@ -38,6 +38,8 @@
 %token _WHILE
 %token _BREAK
 %token _CONTINUE
+%token _POSTINCREMENT
+%token _POSTDECREMENT
 
 
 %token _IF
@@ -235,6 +237,8 @@ statement
   | while_statement
   | break_statement
   | continue_statement
+  | postincrement_statement
+  | postdecrement_statement
   ;
 
 while_statement
@@ -271,6 +275,42 @@ continue_statement
       {
         if (current_while > -1) {
           code("\n\t\tJMP\t@while_%d", current_while);
+        }
+      }
+  ;
+
+postincrement_statement
+  : _ID _POSTINCREMENT _SEMICOLON
+      {
+        int idx = lookup_symbol($1, LET|GLET|PAR|CONST|GCONST);
+        if (get_atr2(idx) == 1 && (get_kind(idx) == CONST || get_kind(idx) == GCONST)) {
+          err("Cannot increment const value!");
+        }
+        else if (idx == NO_INDEX)
+          err("'%s' undeclared", $1);
+        else {
+          code("\n\t\t\tADDS\t");
+          gen_sym_name(idx);
+          code(", $1,");
+          gen_sym_name(idx);
+        }
+      }
+  ;
+
+postdecrement_statement
+  : _ID _POSTDECREMENT _SEMICOLON
+      {
+        int idx = lookup_symbol($1, LET|GLET|PAR|CONST|GCONST);
+        if (get_atr2(idx) == 1 && (get_kind(idx) == CONST || get_kind(idx) == GCONST)) {
+          err("Cannot decrement const value!");
+        }
+        else if (idx == NO_INDEX)
+          err("'%s' undeclared", $1);
+        else {
+          code("\n\t\t\tSUBS\t");
+          gen_sym_name(idx);
+          code(", $1,");
+          gen_sym_name(idx);
         }
       }
   ;
