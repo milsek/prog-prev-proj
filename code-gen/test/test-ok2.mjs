@@ -1,4 +1,4 @@
-//OPIS: arrow function multiple params
+//DESCRIPTION: arrow function multiple params
 //RETURN: 1
 const f1 = (q, r, s) => {
 	let m;

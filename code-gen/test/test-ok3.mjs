@@ -1,4 +1,4 @@
-//OPIS: function expression
+//DESCRIPTION: function expression
 //RETURN: 5
 
 const increment = function(a) {

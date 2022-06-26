@@ -1,4 +1,4 @@
-//OPIS: while with continue
+//DESCRIPTION: while with continue
 //RETURN: 45
 
 const main = () => {

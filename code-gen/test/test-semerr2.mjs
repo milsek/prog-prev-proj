@@ -1,10 +1,6 @@
-//OPIS: reassigning global const value
-//RETURN: 10
-
-const a;
-
+//DESCRIPTION: reassigning const value
 function main() {
-    a = 5;
-	a = 10;
-    return a;
+    const m = 5;
+    m = 10;
+    return m;
 }

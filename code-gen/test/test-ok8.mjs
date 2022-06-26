@@ -1,4 +1,4 @@
-//OPIS: two while loops, one with break
+//DESCRIPTION: two while loops, one with break
 //RETURN: 5
 
 const main = () => {

@@ -70,7 +70,7 @@ archive: clean
 
 # testiranje kompajlera, izvršava se samo ako nema grešaka u gramatici
 # - u petlji će se kompajleru proslediti svi test*.mjs fajlovi
-# - ako u test fajlu postoji linija sa tekstom "//OPIS:", ispisaće se na ekranu
+# - ako u test fajlu postoji linija sa tekstom "//DESCRIPTION:", ispisaće se na ekranu
 # - ukoliko prilikom poziva kompajlera nije bilo grešaka, i ako postoji
 #   generisanje koda, ispisaće se i asemblerski izlaz
 det: $(SRC)
@@ -85,7 +85,7 @@ det: $(SRC)
 		elif [[ $$test =~ .*warn.* ]]; then echo -e "\e[01;33m"; ttyp="war"; \
 		else echo -e "\e[01;36m"; ttyp="ok"; fi; \
 		echo -e "\n\n------------------------\nTesting: $$test"; \
-		grep "//OPIS:" $$test; \
+		grep "//DESCRIPTION:" $$test; \
 		echo -e "------------------------\e[00m"; \
 		RETURN=$$(grep "//RETURN:" "$$test"); \
 		RETURN=$${RETURN#*:}; \
@@ -230,6 +230,6 @@ help:
 	@echo -e "    \e[01;36mtest-warn\e[00m --- nekorektan miniC program sa jednim upozorenjem"
 	@echo -e "    \e[01;36mtest-semerr\e[00m - nekorektan miniC program sa jednom semantičkom greškom"
 	@echo -e "    \e[01;36mtest-synerr\e[00m - nekorektan miniC program sa jednom sintaksnom greškom"
-	@echo -e "Ukoliko se u test fajlu nalazi red koji počinje sa \e[01;36m//OPIS: <tekst>\e[00m, ta linija"
+	@echo -e "Ukoliko se u test fajlu nalazi red koji počinje sa \e[01;36m//DESCRIPTION: <tekst>\e[00m, ta linija"
 	@echo -e "će biti ispisana pre testa.\n"
 

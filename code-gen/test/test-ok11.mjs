@@ -1,4 +1,4 @@
-//OPIS: postdecrement statement
+//DESCRIPTION: postdecrement statement
 //RETURN: 25
 
 const main = () => {

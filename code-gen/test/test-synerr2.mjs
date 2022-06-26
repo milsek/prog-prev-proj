@@ -1,3 +1,9 @@
+//DESCRIPTION: ternary operator without the mandatory parentheses
+
+const f = (a,b,c) => {
+	return a < b ? a : c;
+}
+
 function main() {
-	return 5;
+	return f(1,2,3);
 }

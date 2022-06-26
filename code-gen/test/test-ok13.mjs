@@ -1,4 +1,4 @@
-//OPIS: fibonacci
+//DESCRIPTION: fibonacci
 //RETURN: 75025
 
 let fibonacci = num => {

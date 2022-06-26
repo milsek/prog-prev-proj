@@ -1,4 +1,4 @@
-//OPIS: ternary operator
+//DESCRIPTION: ternary operator
 //RETURN: 25
 
 const main = () => {

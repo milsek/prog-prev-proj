@@ -1,4 +1,4 @@
-//OPIS: postincrement statement
+//DESCRIPTION: postincrement statement
 //RETURN: 10
 
 const main = () => {

@@ -430,7 +430,7 @@ function_call
     _LPAREN arguments _RPAREN
       {
         if(get_atr1(fcall_idx) != $4)
-          err("wrong number of arguments. should be %d, but given %d", get_atr1(fcall_idx), $4 );
+          err("wrong number of arguments. should be %d, but %d were given.", get_atr1(fcall_idx), $4 );
         code("\n\t\t\tCALL\t%s", get_name(fcall_idx));
         if($4 > 0)
           code("\n\t\t\tADDS\t%%15,$%d,%%15", $4 * 4);
@@ -456,8 +456,6 @@ argument_list
 argument
   : num_exp
     {
-      // if(get_atr2(fcall_idx) != get_type($1))
-      //   err("incompatible type for argument");
       free_if_reg($1);
       code("\n\t\t\tPUSH\t");
       gen_sym_name($1);

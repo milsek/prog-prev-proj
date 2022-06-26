@@ -1,9 +1,6 @@
-//OPIS: reassigning const value
-//RETURN: 10
-
+//DESCRIPTION: not initializing const value
 function main() {
     const m;
     m = 5;
-    m = 10;
     return m;
 }

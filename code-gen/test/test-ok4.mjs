@@ -1,4 +1,4 @@
-//OPIS: if else and global variables
+//DESCRIPTION: if else and global variables
 //RETURN: 5
 let a;
 function main() {
