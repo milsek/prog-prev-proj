@@ -58,8 +58,8 @@ extern int yydebug;
     _FUNCDEC = 259,                /* _FUNCDEC  */
     _ARROW = 260,                  /* _ARROW  */
     _COMMA = 261,                  /* _COMMA  */
-    _QMARK = 262,                  /* _QMARK  */
-    _COLON = 263,                  /* _COLON  */
+    _WHILE = 262,                  /* _WHILE  */
+    _BREAK = 263,                  /* _BREAK  */
     _IF = 264,                     /* _IF  */
     _ELSE = 265,                   /* _ELSE  */
     _RETURN = 266,                 /* _RETURN  */
@@ -82,7 +82,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 26 "minijs.y"
+#line 29 "minijs.y"
 
   int i;
   char *s;

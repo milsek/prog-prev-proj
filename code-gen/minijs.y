@@ -20,6 +20,9 @@
   int fun_idx = -1;
   int fcall_idx = -1;
   int lab_num = -1;
+  int while_num = -1;
+  int current_while = -1;
+  int parent_while = -1;
   FILE *output;
 %}
 
@@ -32,8 +35,8 @@
 %token _FUNCDEC
 %token _ARROW
 %token _COMMA
-%token _QMARK
-%token _COLON
+%token _WHILE
+%token _BREAK
 
 
 %token _IF
@@ -228,6 +231,37 @@ statement
   | assignment_statement
   | if_statement
   | return_statement
+  | while_statement
+  | break_statement
+  ;
+
+while_statement
+  : _WHILE
+      {
+        $<i>$ = ++while_num;
+        parent_while = current_while;
+        current_while = while_num;
+        code("\n@while_%d:", while_num);
+      }
+    _LPAREN rel_exp _RPAREN
+      {
+        code("\n\t\t%s\t@end_while_%d", opp_jumps[$4], while_num);
+      }
+    _LBRACKET statement_list _RBRACKET
+      {
+        code("\n\t\tJMP\t@while_%d", $<i>2);
+        code("\n@end_while_%d:", $<i>2);
+        current_while = parent_while;
+      }
+;
+
+break_statement
+  : _BREAK _SEMICOLON
+      {
+        if (current_while > -1) {
+          code("\n\t\tJMP\t@end_while_%d", current_while);
+        }
+      }
   ;
 
 compound_statement

@@ -16,10 +16,10 @@
 "else"               { return _ELSE; }
 "return"             { return _RETURN; }
 "function"           { return _FUNCDEC; }
+"while"              { return _WHILE; }
+"break"              { return _BREAK; }
 
 "=>"                 { return _ARROW; }
-"?"                  { return _QMARK; }
-":"                  { return _COLON; }
 
 "("                  { return _LPAREN; }
 ")"                  { return _RPAREN; }
