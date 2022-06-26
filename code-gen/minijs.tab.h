@@ -63,20 +63,22 @@ extern int yydebug;
     _CONTINUE = 264,               /* _CONTINUE  */
     _POSTINCREMENT = 265,          /* _POSTINCREMENT  */
     _POSTDECREMENT = 266,          /* _POSTDECREMENT  */
-    _IF = 267,                     /* _IF  */
-    _ELSE = 268,                   /* _ELSE  */
-    _RETURN = 269,                 /* _RETURN  */
-    _ID = 270,                     /* _ID  */
-    _NUMBER = 271,                 /* _NUMBER  */
-    _LPAREN = 272,                 /* _LPAREN  */
-    _RPAREN = 273,                 /* _RPAREN  */
-    _LBRACKET = 274,               /* _LBRACKET  */
-    _RBRACKET = 275,               /* _RBRACKET  */
-    _ASSIGN = 276,                 /* _ASSIGN  */
-    _SEMICOLON = 277,              /* _SEMICOLON  */
-    _AROP = 278,                   /* _AROP  */
-    _RELOP = 279,                  /* _RELOP  */
-    ONLY_IF = 280                  /* ONLY_IF  */
+    _QMARK = 267,                  /* _QMARK  */
+    _COLON = 268,                  /* _COLON  */
+    _IF = 269,                     /* _IF  */
+    _ELSE = 270,                   /* _ELSE  */
+    _RETURN = 271,                 /* _RETURN  */
+    _ID = 272,                     /* _ID  */
+    _NUMBER = 273,                 /* _NUMBER  */
+    _LPAREN = 274,                 /* _LPAREN  */
+    _RPAREN = 275,                 /* _RPAREN  */
+    _LBRACKET = 276,               /* _LBRACKET  */
+    _RBRACKET = 277,               /* _RBRACKET  */
+    _ASSIGN = 278,                 /* _ASSIGN  */
+    _SEMICOLON = 279,              /* _SEMICOLON  */
+    _AROP = 280,                   /* _AROP  */
+    _RELOP = 281,                  /* _RELOP  */
+    ONLY_IF = 282                  /* ONLY_IF  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -90,7 +92,7 @@ union YYSTYPE
   int i;
   char *s;
 
-#line 94 "minijs.tab.h"
+#line 96 "minijs.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

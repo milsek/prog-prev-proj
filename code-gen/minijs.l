@@ -21,6 +21,8 @@
 "continue"           { return _CONTINUE; }
 
 "=>"                 { return _ARROW; }
+"?"                  { return _QMARK; }
+":"                  { return _COLON; }
 
 "("                  { return _LPAREN; }
 ")"                  { return _RPAREN; }

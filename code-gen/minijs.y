@@ -40,6 +40,8 @@
 %token _CONTINUE
 %token _POSTINCREMENT
 %token _POSTDECREMENT
+%token _QMARK
+%token _COLON
 
 
 %token _IF
@@ -57,7 +59,7 @@
 %token <i> _RELOP
 
 %type <i> num_exp exp literal
-%type <i> function_call argument rel_exp if_part arguments argument_list
+%type <i> function_call argument rel_exp if_part arguments argument_list ternary_exp
 
 %nonassoc ONLY_IF
 %nonassoc _ELSE
@@ -266,7 +268,7 @@ while_statement
       {
         code("\n\t\t%s\t@end_while_%d", opp_jumps[$4], while_num);
       }
-    _LBRACKET statement_list _RBRACKET
+      statement
       {
         code("\n\t\tJMP\t@while_%d", $<i>2);
         code("\n@end_while_%d:", $<i>2);
@@ -378,15 +380,37 @@ exp
         if($$ == NO_INDEX)
           err("'%s' undeclared", $1);
       }
-
   | function_call
       {
         $$ = take_reg();
         gen_mov(FUN_REG, $$);
       }
-  
   | _LPAREN num_exp _RPAREN
       { $$ = $2; }
+  | _LPAREN rel_exp _RPAREN _QMARK ternary_exp _COLON ternary_exp
+      {
+        int out = take_reg();
+        lab_num++;
+        if(get_type($5) != get_type($7))
+          err("Ternary operator type mismatch!");
+        code("\n\t\t%s\t@false%d", opp_jumps[$2], lab_num);
+        code("\n@true%d:", lab_num);
+        gen_mov($5, out);
+        code("\n\t\tJMP \t@exit%d", lab_num);
+        code("\n@false%d:", lab_num);
+        gen_mov($7, out);
+        code("\n@exit%d:", lab_num);
+        $$ = out;
+      }
+  ;
+
+ternary_exp
+  : _ID
+      {
+        if(($$ = lookup_symbol($1, (LET|CONST|PAR|GLET|GCONST))) == NO_INDEX )
+          err("'%s' undeclared", $1);
+      }
+  | literal
   ;
 
 literal
