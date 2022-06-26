@@ -2,9 +2,7 @@
 increment:
 		PUSH	%14
 		MOV 	%15,%14
-		SUBS	%15,$4,%15
 @increment_body:
-		MOV 	$0,-4(%14)
 		ADDS	8(%14),$1,%0
 		MOV 	%0,%13
 		JMP 	@increment_exit
@@ -26,6 +24,8 @@ add:
 main:
 		PUSH	%14
 		MOV 	%15,%14
+		MOV 	$0,-4(%14)
+		MOV 	$10,-8(%14)
 		SUBS	%15,$8,%15
 @main_body:
 			PUSH	$1

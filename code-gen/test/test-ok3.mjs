@@ -2,8 +2,6 @@
 //RETURN: 5
 
 const increment = function(a) {
-    const b;
-    b = 0;
     return a + 1;
 }
 
@@ -12,8 +10,8 @@ const add = function(a, b) {
 }
 
 function main() {
-    const m;
-    let n;
+    let m = 0;
+    let n = 10;
     m = increment(1);
     n = add(1, 2);
     return m + n;

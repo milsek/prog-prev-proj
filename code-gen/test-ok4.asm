@@ -1,23 +1,22 @@
 
 a:
 		WORD	1
-b:
-		WORD	1
 main:
 		PUSH	%14
 		MOV 	%15,%14
+		MOV 	$3,-4(%14)
+		SUBS	%15,$4,%15
 @main_body:
 		MOV 	$5,a
-		MOV 	$3,b
 @if0:
-		CMPS 	a,b
+		CMPS 	a,-4(%14)
 		JLES	@false0
 @true0:
 		MOV 	a,%13
 		JMP 	@main_exit
 		JMP 	@exit0
 @false0:
-		MOV 	b,%13
+		MOV 	-4(%14),%13
 		JMP 	@main_exit
 @exit0:
 @main_exit:

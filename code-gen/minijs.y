@@ -87,7 +87,7 @@ global_var
           if ($1 == LET)
             insert_symbol($2, GLET, NUMBER, NO_ATR, NO_ATR);
           else if ($1 == CONST)
-            insert_symbol($2, GCONST, NUMBER, NO_ATR, NO_ATR);
+            err("At this point only LET variables can be global.");
           code("\n%s:\n\t\tWORD\t1", $2);
         }
       }
@@ -217,10 +217,23 @@ variable_list
 variable
   : _VARDEC _ID _SEMICOLON
       {
-        if(lookup_symbol($2, PAR|LET|CONST) == NO_INDEX)
+        if ($1 == CONST) {
+          err("Const variable has to be initialized with a value!");
+        }
+        if(lookup_symbol($2, PAR|LET|CONST|GLET|GCONST) == NO_INDEX)
            insert_symbol($2, $1, NUMBER, ++var_num, NO_ATR);
         else 
            err("redefinition of '%s'", $2);
+      }
+  | _VARDEC _ID _ASSIGN num_exp _SEMICOLON
+      {
+        int idx = lookup_symbol($2, PAR|LET|CONST|GLET|GCONST);
+        if(idx == NO_INDEX)
+           idx = insert_symbol($2, $1, NUMBER, ++var_num, NO_ATR);
+        else 
+           err("redefinition of '%s'", $2);
+        set_atr2(idx, 1);
+        gen_mov($4, idx);
       }
   ;
 
@@ -322,7 +335,6 @@ compound_statement
 assignment_statement
   : _ID _ASSIGN num_exp _SEMICOLON
       {
-        // const cannot be assigned again
         int idx = lookup_symbol($1, PAR|LET|CONST|GLET|GCONST);
         if(idx == NO_INDEX)
           err("invalid lvalue '%s' in assignment", $1);
