@@ -54,22 +54,14 @@ a++;  // 1
 a--;  // 0
 ```
 
-### While loops
-The **_while_** loops are implemented alongside the **_break_** and **_continue_** features, which allow the user to control the flow of the loop. These keywords work with multiple nested loops.
+### Loops
+The **_while_** and **_for_** loops are implemented alongside the **_break_** and **_continue_** features, which allow the user to control the flow of the loop. These keywords work with multiple nested loops.
 ```js
-let i = 0;
-let j = 0;
-let k = 0;
-  while (i < 10) {
-    while (j < 10) {
-      if (i >= 5) {
-        break;
-      }
-      k = k + j;
-      j = j + 1;
-    }
-    i = i + 1;
-  }
+while (k < 6) {
+  for (let i = 0; i < 6; i++) 
+    l = k + l + i;
+  k++;
+}
 return k;
 ```
 
