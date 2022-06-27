@@ -5,12 +5,12 @@ main:
 		SUBS	%15,$4,%15
 @main_body:
 		MOV 	$0,-4(%14)
-@while_0:
+@loop_0:
 		CMPS 	-4(%14),$10
-		JGES	@end_while_0
-			ADDS	-4(%14), $1,-4(%14)
-		JMP	@while_0
-@end_while_0:
+		JGES	@end_loop_0
+		ADDS	-4(%14), $1,-4(%14)
+		JMP	@loop_0
+@end_loop_0:
 		MOV 	-4(%14),%13
 		JMP 	@main_exit
 @main_exit:

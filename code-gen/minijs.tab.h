@@ -59,26 +59,27 @@ extern int yydebug;
     _ARROW = 260,                  /* _ARROW  */
     _COMMA = 261,                  /* _COMMA  */
     _WHILE = 262,                  /* _WHILE  */
-    _BREAK = 263,                  /* _BREAK  */
-    _CONTINUE = 264,               /* _CONTINUE  */
-    _POSTINCREMENT = 265,          /* _POSTINCREMENT  */
-    _POSTDECREMENT = 266,          /* _POSTDECREMENT  */
-    _QMARK = 267,                  /* _QMARK  */
-    _COLON = 268,                  /* _COLON  */
-    _IF = 269,                     /* _IF  */
-    _ELSE = 270,                   /* _ELSE  */
-    _RETURN = 271,                 /* _RETURN  */
-    _ID = 272,                     /* _ID  */
-    _NUMBER = 273,                 /* _NUMBER  */
-    _LPAREN = 274,                 /* _LPAREN  */
-    _RPAREN = 275,                 /* _RPAREN  */
-    _LBRACKET = 276,               /* _LBRACKET  */
-    _RBRACKET = 277,               /* _RBRACKET  */
-    _ASSIGN = 278,                 /* _ASSIGN  */
-    _SEMICOLON = 279,              /* _SEMICOLON  */
-    _AROP = 280,                   /* _AROP  */
-    _RELOP = 281,                  /* _RELOP  */
-    ONLY_IF = 282                  /* ONLY_IF  */
+    _FOR = 263,                    /* _FOR  */
+    _BREAK = 264,                  /* _BREAK  */
+    _CONTINUE = 265,               /* _CONTINUE  */
+    _POSTINCREMENT = 266,          /* _POSTINCREMENT  */
+    _POSTDECREMENT = 267,          /* _POSTDECREMENT  */
+    _QMARK = 268,                  /* _QMARK  */
+    _COLON = 269,                  /* _COLON  */
+    _IF = 270,                     /* _IF  */
+    _ELSE = 271,                   /* _ELSE  */
+    _RETURN = 272,                 /* _RETURN  */
+    _ID = 273,                     /* _ID  */
+    _NUMBER = 274,                 /* _NUMBER  */
+    _LPAREN = 275,                 /* _LPAREN  */
+    _RPAREN = 276,                 /* _RPAREN  */
+    _LBRACKET = 277,               /* _LBRACKET  */
+    _RBRACKET = 278,               /* _RBRACKET  */
+    _ASSIGN = 279,                 /* _ASSIGN  */
+    _SEMICOLON = 280,              /* _SEMICOLON  */
+    _AROP = 281,                   /* _AROP  */
+    _RELOP = 282,                  /* _RELOP  */
+    ONLY_IF = 283                  /* ONLY_IF  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -92,7 +93,7 @@ union YYSTYPE
   int i;
   char *s;
 
-#line 96 "minijs.tab.h"
+#line 97 "minijs.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

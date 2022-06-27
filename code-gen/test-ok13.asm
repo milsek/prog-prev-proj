@@ -8,16 +8,16 @@ fibonacci:
 		MOV 	$2,-16(%14)
 		SUBS	%15,$16,%15
 @fibonacci_body:
-@while_0:
+@loop_0:
 		CMPS 	-16(%14),8(%14)
-		JGTS	@end_while_0
+		JGTS	@end_loop_0
 		ADDS	-4(%14),-8(%14),%0
 		MOV 	%0,-12(%14)
 		MOV 	-8(%14),-4(%14)
 		MOV 	-12(%14),-8(%14)
-			ADDS	-16(%14), $1,-16(%14)
-		JMP	@while_0
-@end_while_0:
+		ADDS	-16(%14), $1,-16(%14)
+		JMP	@loop_0
+@end_loop_0:
 		CMPS 	12(%14),$0
 		JNE 	@false0
 @true0:

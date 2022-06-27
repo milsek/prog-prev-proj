@@ -17,6 +17,7 @@
 "return"             { return _RETURN; }
 "function"           { return _FUNCDEC; }
 "while"              { return _WHILE; }
+"for"                { return _FOR; }
 "break"              { return _BREAK; }
 "continue"           { return _CONTINUE; }
 

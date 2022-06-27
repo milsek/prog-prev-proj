@@ -6,13 +6,13 @@ main:
 @main_body:
 		MOV 	$51,-4(%14)
 		MOV 	$0,-8(%14)
-@while_0:
+@loop_0:
 		CMPS 	-4(%14),-8(%14)
-		JLES	@end_while_0
+		JLES	@end_loop_0
 			SUBS	-4(%14), $1,-4(%14)
-			ADDS	-8(%14), $1,-8(%14)
-		JMP	@while_0
-@end_while_0:
+		ADDS	-8(%14), $1,-8(%14)
+		JMP	@loop_0
+@end_loop_0:
 		MOV 	-4(%14),%13
 		JMP 	@main_exit
 @main_exit:

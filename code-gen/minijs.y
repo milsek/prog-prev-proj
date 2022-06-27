@@ -20,9 +20,9 @@
   int fun_idx = -1;
   int fcall_idx = -1;
   int lab_num = -1;
-  int while_num = -1;
-  int current_while = -1;
-  int parent_while = -1;
+  int loop_num = -1;
+  int current_loop = -1;
+  int parent_loop = -1;
   int mul_num = -1;
   FILE *output;
 %}
@@ -37,6 +37,7 @@
 %token _ARROW
 %token _COMMA
 %token _WHILE
+%token _FOR
 %token _BREAK
 %token _CONTINUE
 %token _POSTINCREMENT
@@ -60,7 +61,7 @@
 %token <i> _RELOP
 
 %type <i> num_exp exp literal
-%type <i> function_call argument rel_exp if_part arguments argument_list ternary_exp
+%type <i> function_call argument rel_exp if_part arguments argument_list ternary_exp for_statement
 
 %nonassoc ONLY_IF
 %nonassoc _ELSE
@@ -251,6 +252,7 @@ statement
   | if_statement
   | return_statement
   | while_statement
+  | for_statement
   | break_statement
   | continue_statement
   | postincrement_statement
@@ -260,28 +262,63 @@ statement
 while_statement
   : _WHILE
       {
-        $<i>$ = ++while_num;
-        parent_while = current_while;
-        current_while = while_num;
-        code("\n@while_%d:", while_num);
+        $<i>$ = ++loop_num;
+        parent_loop = current_loop;
+        current_loop = loop_num;
+        code("\n@loop_%d:", loop_num);
       }
     _LPAREN rel_exp _RPAREN
       {
-        code("\n\t\t%s\t@end_while_%d", opp_jumps[$4], while_num);
+        code("\n\t\t%s\t@end_loop_%d", opp_jumps[$4], loop_num);
       }
       statement
       {
-        code("\n\t\tJMP\t@while_%d", $<i>2);
-        code("\n@end_while_%d:", $<i>2);
-        current_while = parent_while;
+        code("\n\t\tJMP\t\t@loop_%d", $<i>2);
+        code("\n@end_loop_%d:", $<i>2);
+        current_loop = parent_loop;
       }
 ;
 
+for_statement
+  : _FOR _LPAREN _VARDEC _ID _ASSIGN literal
+      {
+        $<i>$ = ++loop_num;
+        parent_loop = current_loop;
+        current_loop = loop_num;
+        int i = lookup_symbol($4, LET|GLET|CONST|GCONST|PAR);
+        if (i != NO_INDEX)
+          err("redefinition of %s", $4);
+        else
+          i = insert_symbol($4, $3, NUMBER, ++var_num, NO_ATR);
+        gen_mov($6, i);
+        code("\n@loop_%d:", loop_num);
+      }
+  _SEMICOLON rel_exp
+      {
+        code("\n\t\t%s\t@end_loop_%d", opp_jumps[$9], $<i>7);
+      }
+  _SEMICOLON _ID _POSTINCREMENT _RPAREN statement
+      {
+        int i = lookup_symbol($12, LET|GLET|CONST|GCONST|PAR);
+        if (i == NO_INDEX)
+          err("undecalred %s", $12);
+        else if (get_kind(i) == CONST || get_kind(i) == GCONST)
+          err("cannot increment const variable %s", $12);
+
+        code("\n\t\tADDS\t");
+        gen_sym_name(i);
+        code(", $1, ");
+        gen_sym_name(i);
+
+        code("\n\t\tJMP \t@loop_%d", $<i>7);
+        code("\n@end_loop_%d:", $<i>7);
+      }
+    ;
 break_statement
   : _BREAK _SEMICOLON
       {
-        if (current_while > -1) {
-          code("\n\t\tJMP\t@end_while_%d", current_while);
+        if (current_loop > -1) {
+          code("\n\t\tJMP\t@end_loop_%d", current_loop);
         }
       }
   ;
@@ -289,8 +326,8 @@ break_statement
 continue_statement
   : _CONTINUE _SEMICOLON
       {
-        if (current_while > -1) {
-          code("\n\t\tJMP\t@while_%d", current_while);
+        if (current_loop > -1) {
+          code("\n\t\tJMP\t@loop_%d", current_loop);
         }
       }
   ;
@@ -300,12 +337,12 @@ postincrement_statement
       {
         int idx = lookup_symbol($1, LET|GLET|PAR|CONST|GCONST);
         if (get_atr2(idx) == 1 && (get_kind(idx) == CONST || get_kind(idx) == GCONST)) {
-          err("Cannot increment const value!");
+          err("Cannot increment const variable %s", $1);
         }
         else if (idx == NO_INDEX)
           err("'%s' undeclared", $1);
         else {
-          code("\n\t\t\tADDS\t");
+          code("\n\t\tADDS\t");
           gen_sym_name(idx);
           code(", $1,");
           gen_sym_name(idx);
@@ -318,7 +355,7 @@ postdecrement_statement
       {
         int idx = lookup_symbol($1, LET|GLET|PAR|CONST|GCONST);
         if (get_atr2(idx) == 1 && (get_kind(idx) == CONST || get_kind(idx) == GCONST)) {
-          err("Cannot decrement const value!");
+          err("Cannot decrement const variable %s", $1);
         }
         else if (idx == NO_INDEX)
           err("'%s' undeclared", $1);
@@ -383,11 +420,11 @@ num_exp
           code("\n\t\tCMPS \t");
           gen_sym_name(counter);
           code(", $0");
-          code("\n\t\tJLTS\t\t@mul_neg_%d", mul_num);
+          code("\n\t\tJLTS\t@mul_neg_%d", mul_num);
 
           // positive multiplication
           code("\n@mul_pos_%d:", mul_num);
-          code("\n\t\tCMPS \t");
+          code("\n\t\tCMPS\t");
           gen_sym_name(counter);
           code(", $0");
           code("\n\t\tJEQ\t\t@end_mul_%d", mul_num);
@@ -404,7 +441,7 @@ num_exp
           code(", $1");
           code(", ");
           gen_sym_name(counter);
-          code("\n\t\tJMP\t@mul_pos_%d", mul_num);
+          code("\n\t\tJMP\t\t@mul_pos_%d", mul_num);
 
 
           // negative multiplication
@@ -426,7 +463,7 @@ num_exp
           code(", $1");
           code(", ");
           gen_sym_name(counter);
-          code("\n\t\tJMP\t@mul_neg_%d", mul_num);
+          code("\n\t\tJMP\t\t@mul_neg_%d", mul_num);
 
           code("\n@end_mul_%d:", mul_num);
           free_if_reg($3);
