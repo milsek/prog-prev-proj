@@ -1,7 +1,14 @@
 # Mini JavaScript compiler
 
- - Technologies used: **Bison** + **Flex** + **Hipsim**
+ - Technologies used: **Bison** + **Flex** + **Hipsim** + **gcc**
  - Translates simplified JS into a mock Assembly language
+#### How to run
+Navigate to the code-gen directory and run the following command inside the terminal:
+```bash
+make test TEST="{path to the test file or {./name_of_test_folder/*}}"
+```
+This will show whether the given program successfully compiles as well as generate the proper .asm file.
+
 
 ## Features
 This mini-compiler was built on top of an existing miniC compiler used for teaching purposes. It is incredibly simple and limiting, so my
