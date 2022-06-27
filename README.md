@@ -32,7 +32,7 @@ const func31 = function(a, b) {
 ```
 ### JavaScript declarations
 This mini-compiler uses **_let_** and **_const_** keywords in order to provide control over variables.
-Obviously, _const_ variables have to be initialized upon declaration and they cannot be reassigned later, while the variables declared using the _let_ keyword can be changed at will. It expands upon the aforementioned miniC compiler by allowing the user to also initialize variables upon declaration, as well as initialize global variables (only using _let_ though).
+Obviously, _const_ variables have to be initialized upon declaration and they cannot be reassigned later, while the variables declared using the _let_ keyword can be changed at will. It expands upon the aforementioned miniC compiler by allowing the user to also initialize variables upon declaration, as well as declare global variables (only using _let_ though, without initialization).
 ```js
 let b;
 function main() {
